@@ -3,6 +3,7 @@ import BlogCard from "./components/BlogCard.js";
 import Button from "./components/Button.js";
 import {useState} from "react";
 import AddBlogForm from "./components/AddBlogForm";
+import axios from "axios";
 
 function App() {
     const [blogEntries, setBlogEntries] = useState([]);
@@ -10,18 +11,18 @@ function App() {
 
     const BlogEntriesContent = [{
         id: "1",
-        name: "Blogeintrag 1",
-        content: "this  the content of Blogeintrag 1",
+        title: "Blogeintrag 1",
+        body: "this  the content of Blogeintrag 1",
     },
         {
             id: "2",
-            name: "Blogeintrag 2",
-            content: "this is the content of Blogeintrag 2",
+            title: "Blogeintrag 2",
+            body: "this is the content of Blogeintrag 2",
         },
         {
             id: "3",
-            name: "Blogeintrag 3",
-            content: "this is the content of Blogeintrag 3",
+            title: "Blogeintrag 3",
+            body: "this is the content of Blogeintrag 3",
         }];
 
 
@@ -35,10 +36,20 @@ function App() {
             <Button onClick={() => console.log("Ich wurde geklickt")} primary
                     buttonheadline="Ich bin ein primary Button"/>
 
+            <button onClick={() =>
+                setBlogEntries([])
+            }> Delete all Entries
+            </button>
+
+            <button className="axiosButton" onClick={SetBlogEntriesWithAxios}>
+                Ich erstelle 100 Blogeinträge von JsonPlaceholder API
+            </button>
+
+
             {blogEntries.map(blogEntry => <BlogCard
                 key={blogEntry.id}
-                headline={blogEntry.name}
-                content={blogEntry.content}
+                title={blogEntry.title}
+                body={blogEntry.body}
                 onDelete={() => {
                     const updatedList = blogEntries.filter(item => item.id !== blogEntry.id);
                     setBlogEntries(updatedList);
@@ -46,23 +57,25 @@ function App() {
                 onAdd={() => {
                     const updatedList = [...blogEntries, {
                         id: {randomid},
-                        name: "neuer Blogeintrag",
-                        content: "Hier ist der Inhalt dafür"
+                        title: "neuer Blogeintrag",
+                        body: "Hier ist der Inhalt dafür"
                     }];
                     setBlogEntries(updatedList);
                 }}
-                onShuffle={() => {
-                    const updatedList = blogEntries.reverse(blogEntries);
-                    setBlogEntries(updatedList);
-                }}
-
             />)}
 
-            <button onClick={() => setBlogEntries(BlogEntriesContent)}>Ich bin der neue Button</button>
+            <button onClick={() => setBlogEntries(BlogEntriesContent)}>
+                Ich erzeuge die vordefinierten Blogeinträge
+            </button>
         </div>
-
-
     )
+
+    function SetBlogEntriesWithAxios() {
+        const responsePromise = axios.get('https://jsonplaceholder.typicode.com/posts')
+        responsePromise.then(response => {
+            setBlogEntries(response.data)
+        });
+    }
 
 }
 

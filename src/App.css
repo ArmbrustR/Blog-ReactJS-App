@@ -19,5 +19,12 @@ h1 {
   font-style: italic;
   font-family: "Comic Sans MS";
   font-size: 3em;
+}
+
+.axiosButton {
+  margin: 40px;
+  border-style: dotted;
+  border-color: lightblue;
+  padding: 20px;
 
 }
